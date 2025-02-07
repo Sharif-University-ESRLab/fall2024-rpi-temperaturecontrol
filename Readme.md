@@ -60,6 +60,7 @@ Some links related to your project come here.
 
 ## Authors
 Authors and their github link come here.
-- [@Author1](https://github.com/Sharif-University-ESRLab)
-- [@Author2](https://github.com/Sharif-University-ESRLab)
+- [@Ali Ansari](https://github.com/allliance)
+- [@Bahar DibaeiNia](https://github.com/bhrdbn)
+- [@Ali Hezaveh](https://github.com/Sharif-University-ESRLab)
 
