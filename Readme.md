@@ -2,18 +2,18 @@
 ![Logo](https://via.placeholder.com/600x150?text=Your+Logo+Here+600x150)
 
 
-# Project Title
+# Server Temperature Control Using Raspberry Pi
 
-A brief description of what this project does and who it's for comes here.
-
+In this project, we aim to create a temperature controlling system, which uses a Raspberry Pi to control the fan speed, according to the server's temperature. 
 
 ## Tools
-In this section, you should mention the hardware or simulators utilized in your project.
-- Qemu
-- Gem5
-- ESP32
+
 - Raspberry Pi 3B
-- Temperature Sensor
+- AM2302 Temperature Sensor (Uses one-wire protocol)
+- OpenBMC Operating System
+- A 2-pin 12V DC Fan
+- BC107 Transistor
+- USB-UART Converter
 
 
 ## Implementation Details
@@ -60,7 +60,7 @@ Some links related to your project come here.
 
 ## Authors
 Authors and their github link come here.
-- [@Ali Ansari](https://github.com/allliance)
-- [@Bahar DibaeiNia](https://github.com/bhrdbn)
-- [@Ali Hezaveh](https://github.com/Sharif-University-ESRLab)
+- [Ali Ansari](https://github.com/allliance)
+- [Bahar DibaeiNia](https://github.com/bhrdbn)
+- [Ali Hezaveh](https://github.com/Sharif-University-ESRLab)
 
