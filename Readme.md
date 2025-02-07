@@ -9,7 +9,7 @@ In this project, we aim to create a temperature controlling system, which uses a
 ## Tools
 
 - Raspberry Pi 3B
-- AM2302 Temperature Sensor (Uses one-wire protocol)
+- AM2302 (DHT11) Temperature Sensor (Uses one-wire protocol)
 - OpenBMC Operating System
 - A 2-pin 12V DC Fan
 - BC107 Transistor
@@ -201,6 +201,45 @@ In this project, we aim to create a temperature controlling system, which uses a
 - کاربرد پروژه:
   این پروژه به عنوان یک نمونه کاربردی از استفاده از محیط Yocto برای ساخت سیستم‌های جاسازی‌شده و بهره‌گیری از OpenBMC برای مدیریت سخت‌افزار، قابلیت اطمینان و انعطاف‌پذیری را نشان می‌دهد.
 </div>
+
+#### Some notes on starting and using Raspberry Pi3 Model B with OpenBMC installed
+Although the default username and password for OpenBMC are `root` and `0penBmc`, we weren't able to login with these credentials. Instead, we edited the `/etc/shadow` file so that the root does not have any password. 
+
+### Interacting with Raspberry Pi 3 B using your system
+
+A challenging part of the project was to connect Raspberry Pi to your PC and interact it using tools such as `PuTTY` (Windows) or `screen` (linux). Here is the descriptions for `PuTTY`, but it is not so different for other terminal emulators
+
+Wires connection:
+- Get a uart to usb converter.
+- connect Rx of converter to Pin No. 8 of Rpi (Tx of Rpi)
+- connect Tx of converter to Pin No. 10 of Rpi (Rx of Rpi)
+- connect GND of converter to any GND of Rpi, for example Pin No. 6
+
+Add these to config.txt of boot of rpi (in the memory card):
+- `enable_uart=1`
+- `dtoverlay=disable-bt`
+- `core_freq=250`
+
+Add this line somewhere in /etc/inittab:
+```
+T0:2345:respawn:/sbin/getty -L ttyAMA0 115200 vt100
+```
+
+also, cmdline.txt should be this:
+```
+console=ttyAMA0,115200 root=/dev/mmcblk0p2 rootfstype=ext4 fsck.repair=yes rootwait S
+```
+
+To connect the RPi to your pc, you can use PuTTY in windows or screen in linux.
+First, turn off the rpi if it is on.
+Then, connect the UART-USB converter to your PC.
+Then using device manager in windows, find the COM# port corresponding to the converter (mine was COM11).
+Then, connect to putty with the following configuration:
+
+
+ 
+Now, you can turn on the rpi. You can do it by plugging its power to one of the USB ports of your own computer. Now, you can use it!
+
 
 ## Authors
 - [Ali Ansari](https://github.com/allliance)
