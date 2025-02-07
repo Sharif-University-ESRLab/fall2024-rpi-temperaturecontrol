@@ -236,9 +236,11 @@ Then, connect the UART-USB converter to your PC.
 Then using device manager in windows, find the COM# port corresponding to the converter (mine was COM11).
 Then, connect to putty with the following configuration:
 
-<img src="Miscellaneous/PuTTY1.png>
-<img src="Miscellaneous/PuTTY2.png>
 
+<p align="center">
+<img src="Miscellaneous/PuTTY1.png" />
+<img src="Miscellaneous/PuTTY2.png" />
+</p>
 Now, you can turn on the rpi. You can do it by plugging its power to one of the USB ports of your own computer. Now, you can use it!
 
 
