@@ -19,7 +19,7 @@ In this project, we aim to create a temperature controlling system, which uses a
 ## Implementation Details
 
 ### Compiling and Using OpenBMC
-
+<div dir="rtl">
 1. شرح پروژه
 
  OpenBMC یک بورد مدیریت سیستم (Baseboard Management Controller) متن‌باز است که برای نظارت و مدیریت سخت‌افزارهای سروری و سیستم‌های جاسازی‌شده استفاده می‌شود. استفاده از Raspberry Pi 3 به عنوان بستر سخت‌افزاری به دلیل هزینه پایین و قابلیت انعطاف در پروژه‌های تحقیقاتی و آموزشی، انتخاب مناسبی می‌باشد.
@@ -200,7 +200,7 @@ In this project, we aim to create a temperature controlling system, which uses a
 
 - کاربرد پروژه:
   این پروژه به عنوان یک نمونه کاربردی از استفاده از محیط Yocto برای ساخت سیستم‌های جاسازی‌شده و بهره‌گیری از OpenBMC برای مدیریت سخت‌افزار، قابلیت اطمینان و انعطاف‌پذیری را نشان می‌دهد.
-
+</div>
 
 ## Authors
 - [Ali Ansari](https://github.com/allliance)
