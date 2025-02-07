@@ -243,6 +243,19 @@ Then, connect to putty with the following configuration:
 </p>
 Now, you can turn on the rpi. You can do it by plugging its power to one of the USB ports of your own computer. Now, you can use it!
 
+### Turning an LED On and Off
+
+#### Using C
+
+#### Using Python
+
+### Reading Temperature from a DHT11 Temperature Sensor
+
+### Putting everything together (Actual Temperature Controller!)
+
+#### Wirings and Circuits
+
+#### Code
 
 ## Authors
 - [Ali Ansari](https://github.com/allliance)
