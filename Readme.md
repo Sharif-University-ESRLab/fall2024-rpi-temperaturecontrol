@@ -385,6 +385,22 @@ while True:
 ### Putting everything together (Actual Temperature Controller!)
 
 #### Wirings and Circuits
+We used a BC107 transistor as a low-side switch to be able to control the fan using RPi's GPIO. We also used a 12V DC power supply. Note that you can buy a cheap adaptor to convert 220 V AC to this desired electricity.
+
+** Notes: BC107's collector current's capacity is around 100mA. So note that the used fan does not need a current higher than this value. We first used a fan which needed 250mA, and the transistor heated very much, so we used a smaller fan instead.
+
+Here is the pins names of the BC107 transistor:
+
+<p align="center">
+<img src="Miscellaneous/BC107.png" />
+</p>
+
+Wirings:
+- GPIO Pin -> 200Ω Resistor -> Base: We used GPIO23 to control the fan. The resistor is used to limit the current to the base of the transistor and protect the GPIO.
+- Emitter -> GND of power supply
+- GND of RPi (39 Physical pin) -> GND of power supply
+- Fan's + terminal -> 12 V
+- Fan's - terminal -> Collector of BC107
 
 #### Code
 
