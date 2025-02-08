@@ -1,7 +1,3 @@
-
-![Logo](https://via.placeholder.com/600x150?text=Your+Logo+Here+600x150)
-
-
 # Server Temperature Control Using Raspberry Pi
 
 In this project, we aim to create a temperature controlling system, which uses a Raspberry Pi to control the fan speed, according to the server's temperature. 
@@ -245,9 +241,107 @@ Now, you can turn on the rpi. You can do it by plugging its power to one of the 
 
 ### Turning an LED On and Off
 
+The first step of using RPi is to use its GPIO pins to create a blinking LED. We have implemented the code for this purpose both in Python and C. However, there are some notes on using each of these programming languages:
+
+- C: Although we have included gcc in the configuration files when building OpenBMC, the bash couldn't recognize `gcc`. Instead, you have to use another name for accessing gcc. The name is `arm-openbmc-linux-gnueabi-gcc`.
+- Python: There are two popular libraries to work with GPIO in python: `gpiozero` and `RPi.GPIO`. We focused on using gpiozero.
+We first tried to install this package when building OpenBMC, but it didn't work.
+So, we built a virtual environment on some other machine (my own linux) and installed the necessary packages, and activated this env in raspberry pi.
+Also note that `source env/bin/activate` does not work. I am not sure why, but an alternative way is to add the path to the libs directly to syspath at the beginning of the code. You can do this by adding these lines at the very beginning of your python code:
+
+```python
+import sys
+sys.path.append('env/lib/python3.8/site-packages')
+```
+
+We also tried to use RPi.GPIO as well, but its module couldn't be loaded correctly.
+
 #### Using C
 
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <unistd.h>
+
+#define GPIO_BASE 0x3F200000 // Base address for Raspberry Pi 3 Model B GPIO
+#define BLOCK_SIZE 4096
+#define GPIO_SET *(gpio + 7)  // GPSET0 register (offset 0x1C)
+#define GPIO_CLR *(gpio + 10) // GPCLR0 register (offset 0x28)
+
+volatile unsigned *gpio; // Pointer to GPIO memory
+
+void setup_io() {
+    int mem_fd = open("/dev/mem", O_RDWR | O_SYNC);
+    if (mem_fd < 0) {
+        perror("Failed to open /dev/mem");
+        exit(1);
+    }
+
+    gpio = (volatile unsigned *)mmap(NULL, BLOCK_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, mem_fd, GPIO_BASE);
+    if (gpio == MAP_FAILED) {
+        perror("mmap failed");
+        close(mem_fd);
+        exit(1);
+    }
+
+    close(mem_fd);
+}
+
+void set_pin_mode_output(int pin) {
+    int gpio_offset = pin / 10;
+    int gpio_bit = (pin % 10) * 3;
+    *(gpio + gpio_offset) &= ~(7 << gpio_bit); // Clear bits
+    *(gpio + gpio_offset) |= (1 << gpio_bit); // Set bits for output mode
+}
+
+int main() {
+    setup_io();
+
+    int gpio_pin = 18; // BCM pin number
+
+    // Set GPIO pin as output
+    set_pin_mode_output(gpio_pin);
+
+    while (1) {
+        // Write HIGH to the pin
+        GPIO_SET = (1 << gpio_pin);
+        printf("Pin set to HIGH\n");
+        sleep(1); // Wait for 1 second
+
+        // Write LOW to the pin
+        GPIO_CLR = (1 << gpio_pin);
+        printf("Pin set to LOW\n");
+        sleep(1); // Wait for 1 second
+    }
+
+    return 0;
+}
+```
+
 #### Using Python
+
+```python
+import sys
+sys.path.append('env/lib/python3.8/site-packages')
+
+from gpiozero import LED
+from time import sleep
+
+
+# Define the GPIO pin (BCM numbering)
+led = LED(17)
+
+while True:
+    led.on()  # Set pin HIGH
+    print("Pin set to HIGH")
+    sleep(1)  # Wait for 1 second
+
+    led.off()  # Set pin LOW
+    print("Pin set to LOW")
+    sleep(1)  # Wait for 1 second
+```
 
 ### Reading Temperature from a DHT11 Temperature Sensor
 
