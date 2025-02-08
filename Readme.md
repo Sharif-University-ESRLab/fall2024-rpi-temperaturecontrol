@@ -464,6 +464,8 @@ Here is a description of our choice for each of the parameters:
 - `Ki`: This coefficient controls the effect of previous errors (difference between temperature and setpoint) on the current fan's speed.
 - `Kd`: This coefficient received the highest value. The reason is that, if the temperature is getting low in a fast pace, it means that the fan's speed is sufficient, so no more speed is needed.
 
+** Note: You have to adjust the `PWM_FREQUENCY` as well. A very high frequency results in the fan to turn only when the pid output is 100%. So we chose `100` as this frequency.
+
 ```python
 import os, sys
 sys.path.append('env/lib/python3.8/site-packages')
