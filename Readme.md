@@ -441,10 +441,15 @@ fan_controller = LED(FAN_PIN)
 while True:
     temperature = get_temperature()
     
-    fan_is_one = temperature > SETPOINT_TEMPERATURE
+    fan_is_on = temperature > SETPOINT_TEMPERATURE
     
-    print(f"Temp: {temperature:.2f}C, Fan's state: {'On' if fan_is_one else 'Off'}")
-    
+    print(f"Temp: {temperature:.2f}C, Fan's state: {'On' if fan_is_on else 'Off'}")
+
+    if fan_is_on:
+       fan_controller.on()
+    else:
+       fan_controller.off()
+
     time.sleep(1)
 ```
 
