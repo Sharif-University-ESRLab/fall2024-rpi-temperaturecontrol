@@ -8,7 +8,6 @@ from gpiozero import PWMOutputDevice
 
 SETPOINT_TEMPERATURE = 24.0  # in Celsius
 
-# PID parameters (start small, tune as needed)
 Kp = 0.04
 Ki = 0.001
 Kd = 1
@@ -48,37 +47,35 @@ while True:
     temperature = get_temperature()
     current_time = time.time()
     dt = current_time - previous_time
+
+    error = temperature - SETPOINT_TEMPERATURE
     
-    if temperature is not None and dt > 0:
-        error = temperature - SETPOINT_TEMPERATURE
-        
-        # Integral term
-        integral_error += error * dt
-        
-        # Derivative term
-        derivative_error = (error - previous_error) / dt
-        
-        # PID output
-        pid_output = (Kp * error) + (Ki * integral_error) + (Kd * derivative_error)
-        
-        # Convert PID output => 0..1 duty cycle
-        # You might clamp this between 0..1
-        if pid_output < 0:
-            pid_output = 0
-        elif pid_output > 1:
-            pid_output = 1
-        
-        # Set PWM
-        fan_pwm.value = pid_output
-        
-        # Debug prints
-        print(f"Temp: {temperature:.2f}C, Error: {error:.2f}, PID out: {pid_output:.2f}")
-        
-        # Prepare for next iteration
-        previous_error = error
-        previous_time = current_time
-    else:
-        print("Failed to read DHT22 or dt=0, skipping this iteration.")
+    # Integral term
+    integral_error += error * dt
     
-    # Adjust delay as needed, but typically a 1-2 second loop is fine for basic fan control
+    # Derivative term
+    derivative_error = (error - previous_error) / dt
+    
+    # PID output
+    pid_output = (Kp * error) + (Ki * integral_error) + (Kd * derivative_error)
+    
+    pid_output_real = pid_output
+    
+    # Convert PID output => 0..1 duty cycle
+    # You might clamp this between 0..1
+    if pid_output < 0:
+        pid_output = 0
+    elif pid_output > 1:
+        pid_output = 1
+    
+    # Set PWM
+    fan_pwm.value = pid_output
+    
+    # Debug prints
+    print(f"Temp: {temperature:.2f}C, Error: {error:.2f}, PID out: {pid_output:.2f}, Real PID out: {pid_output_real:.2f}")
+    
+    # Prepare for next iteration
+    previous_error = error
+    previous_time = current_time
+    
     time.sleep(1)
