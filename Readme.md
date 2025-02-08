@@ -345,6 +345,43 @@ while True:
 
 ### Reading Temperature from a DHT11 Temperature Sensor
 
+First, we have to wire the sensor to RPi. Here is the pins names of the sensor and RPi pins:
+
+<p align="center">
+<img src="Miscellaneous/AM2302 pins.png" />
+<img src="Miscellaneous/GPIO.png" />
+</p>
+
+Here is the wiring we used:
+- Sensor's VCC (pin1) -> RPi Physical pin 1 (top most pin on the left column)
+- Sensor's Data (pin2) -> RPi Physical pin 7 (GPIO 4)
+- Sensor's GND (pin4) -> RPi Physical pin 9 (GND)
+
+Now, to read the temperature and humidity, we used the following code:
+
+```python
+import time
+import board
+import adafruit_dht
+
+# Initialize DHT device, with data pin connected to board.D4 (GPIO4 on Pi)
+# For an AM2302/DHT22 sensor:
+dhtDevice = adafruit_dht.DHT22(board.D4)
+
+while True:
+    try:
+        temperature_c = dhtDevice.temperature
+        humidity = dhtDevice.humidity
+        if humidity is not None and temperature_c is not None:
+            print(f"Temp: {temperature_c:.1f} °C   Humidity: {humidity:.1f}%")
+        else:
+            print("Failed to retrieve data from the DHT sensor")
+    except RuntimeError as error:
+        # It's normal to get errors occasionally, sensor may be busy.
+        print(f"Reading error: {error.args[0]}")
+    time.sleep(2)
+```
+
 ### Putting everything together (Actual Temperature Controller!)
 
 #### Wirings and Circuits
