@@ -6,11 +6,13 @@ import board
 import adafruit_dht as adht
 from gpiozero import LED
 
-SETPOINT_TEMPERATURE = 24.0  # in Celsius
+SETPOINT_TEMPERATURE1 = 26.0  # in Celsius
+
+SETPOINT_TEMPERATURE2 = 27.0  # in Celsius
 
 FAN_PIN = 23
 dht_device = adht.DHT22(board.D4)
-last_temp = SETPOINT_TEMPERATURE
+last_temp = SETPOINT_TEMPERATURE1
 
 def get_temperature():
     global dht_device, last_temp
@@ -27,11 +29,23 @@ def get_temperature():
 
 fan_controller = LED(FAN_PIN)
 
+current_state = 0
+
 while True:
     temperature = get_temperature()
     
-    fan_is_one = temperature > SETPOINT_TEMPERATURE
+    if temperature > SETPOINT_TEMPERATURE2:
+        current_state = 1
+    elif temperature < SETPOINT_TEMPERATURE1:
+        current_state = 0
     
-    print(f"Temp: {temperature:.2f}C, Fan's state: {'On' if fan_is_one else 'Off'}")
+    fan_is_on = current_state
     
+    print(f"Temp: {temperature:.2f}C, Fan's state: {'On' if fan_is_on else 'Off'}")
+
+    if fan_is_on:
+       fan_controller.on()
+    else:
+       fan_controller.off()
+
     time.sleep(1)
